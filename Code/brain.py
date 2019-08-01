@@ -16,5 +16,17 @@ class Brain(object):
         self.learning_rate = learning_rate
         
         # BUILDIND THE INPUT LAYER COMPOSED OF THE INPUT STATE
+        states = Input(shape = (3,))
         
-        # PAST MODEL HERE
+        # BUILDING THE FULLY CONNECTED HIDDEN LAYERS
+        x = Dense(units = 64, activation = 'sigmoid')(states)
+        y = Dense(units = 32, activation = 'sigmoid')(x)
+        
+        # BUILDING THE OUTPUT LAYER, FULLY CONNECTED TO THE LAST HIDDEN LAYER
+        q_values = Dense(units = number_actions, activation = 'softmax')(y)
+        
+        # ASSEMBLING THE FULL ARCHITECTURE INSIDE A MODEL OBJECT
+        self.model = Model(inputs = states, outputs = q_values)
+        
+        # COMPILING THE MODEL WITH A MEAN-SQUARED ERROR LOSS AND A CHOSEN OPTIMIZER
+        self.model.compile(loss = 'mse', optimizer = Adam(lr = learning_rate))
