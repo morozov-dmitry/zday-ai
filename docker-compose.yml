@@ -1,0 +1,46 @@
+version: "3.1"
+services:
+
+    ai:
+      #image: ufoym/deepo:cpu
+      build: ai
+      container_name: ai_zday
+      tty: true
+      volumes:
+        - ./Code:/Code
+      ports:
+        - "6006:6006"
+      links:
+        - mongo
+      depends_on:
+        - mongo
+  
+
+    mongo:
+      image: mongo
+      container_name: ai_zday_mongo
+      volumes:
+        - .:/mongo    
+
+    api:
+      build: api
+      container_name: ai_zday_api
+      restart: always
+      ports:
+        - "3003:3003"
+      links:
+        - mongo
+      depends_on:
+        - mongo
+
+    front:
+      build: front
+      container_name: ai_zday_front
+      restart: always
+      ports:
+        - "3000:3000"
+      depends_on:
+        - api  
+  
+
+    
